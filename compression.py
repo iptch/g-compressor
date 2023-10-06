@@ -4,6 +4,8 @@ import io
 
 def compress(inputblob: func.InputStream, resolution: int) -> bytes:
     image = Image.open(inputblob)
+
+    # Set max height and width
     max_size = (resolution, resolution)
 
     # Create a thumbnail. This method modifies the image to contain 
