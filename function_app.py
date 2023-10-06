@@ -1,6 +1,8 @@
 import azure.functions as func
 import logging
 import compression
+import os
+from azure.storage.blob import BlobServiceClient
 
 app = func.FunctionApp()
 
@@ -29,3 +31,7 @@ def image_compressor_ultra_low(inputblob: func.InputStream, outputblob: func.Out
 @app.event_grid_trigger(arg_name="azeventgrid")
 def delete_compressed_image(azeventgrid: func.EventGridEvent):
     logging.info(f'Python EventGrid trigger processed an event, name: {azeventgrid.subject}')
+    logging.info("JSON:")
+    logging.info(azeventgrid.get_json())
+    logging.info("NAME:")
+    logging.info(os.path.basename(azeventgrid.subject))
