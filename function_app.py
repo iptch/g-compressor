@@ -18,7 +18,7 @@ app = func.FunctionApp()
                  path=TARGET_CONTAINER_DETAIL_VIEWS + "/{name}",
                  connection=CONNECTION)
 def compress_image_for_detail_view(inputblob: func.InputStream, outputblob: func.Out[str]):
-    logging.info(f"Compressing '{inputblob.name}' to LOW")
+    logging.info(f"Compressing '{inputblob.name}' for detail view")
     compressed_image = compression.compress(inputblob, 500)
     outputblob.set(compressed_image)
 
@@ -29,8 +29,8 @@ def compress_image_for_detail_view(inputblob: func.InputStream, outputblob: func
                  path=TARGET_CONTAINER_THUMBNAILS + "/{name}",
                  connection=CONNECTION)
 def compress_image_for_thumbnail(inputblob: func.InputStream, outputblob: func.Out[str]):
-    logging.info(f"Compressing '{inputblob.name}' to ULTRA LOW")
-    compressed_image = compression.compress(inputblob, 100)
+    logging.info(f"Compressing '{inputblob.name}' for thumbnail")
+    compressed_image = compression.compress(inputblob, 200)
     outputblob.set(compressed_image)
 
 @app.event_grid_trigger(arg_name="azeventgrid")
