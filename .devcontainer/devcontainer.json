@@ -14,7 +14,8 @@
 				"ms-python.python",
 				"GitHub.copilot",
 				"ms-azuretools.vscode-azurestorage",
-				"Azurite.azurite"
+				"Azurite.azurite",
+				"eamodio.gitlens"
 			]
 		}
 	},

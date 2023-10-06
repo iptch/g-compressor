@@ -5,7 +5,7 @@ import os
 from azure.storage.blob import BlobServiceClient
 
 CONNECTION = "AzureWebJobsStorage"
-SOURCE_CONTAINER = "card-high-res-images"
+SOURCE_CONTAINER = "card-originals"
 TARGET_CONTAINER_DETAIL_VIEWS = "card-detail-views"
 TARGET_CONTAINER_THUMBNAILS = "card-thumbnails"
 
