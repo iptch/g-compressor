@@ -1,34 +1,31 @@
 import azure.functions as func
 import logging
-from PIL import Image
-import io
+import compression
 
 app = func.FunctionApp()
 
 @app.blob_trigger(arg_name="inputblob",
-                  path="techcamp-source/{name}.{extension}",
+                  path="techcamp-source/{name}",
                   connection="AzureWebJobsStorage")
 @app.blob_output(arg_name="outputblob",
-                 path="techcamp-target-low/{name}.{extension}",
+                 path="techcamp-target-low/{name}",
                  connection="AzureWebJobsStorage")
-def image_compressor(inputblob: func.InputStream, outputblob: func.Out[str]):
-    logging.info(f"Python blob trigger function processed blob with name: {inputblob.name}")
+def image_compressor_low(inputblob: func.InputStream, outputblob: func.Out[str]):
+    logging.info(f"Python blob trigger function compressed image to LOW: {inputblob.name}")
+    compressed_image = compression.compress(inputblob, 500)
+    outputblob.set(compressed_image)
 
-    image = Image.open(inputblob)
-    print(f"Image format: {image.format}")
+@app.blob_trigger(arg_name="inputblob",
+                  path="techcamp-source/{name}",
+                  connection="AzureWebJobsStorage")
+@app.blob_output(arg_name="outputblob",
+                 path="techcamp-target-ultra-low/{name}",
+                 connection="AzureWebJobsStorage")
+def image_compressor_ultra_low(inputblob: func.InputStream, outputblob: func.Out[str]):
+    logging.info(f"Python blob trigger function compressed image to ULTRA LOW: {inputblob.name}")
+    compressed_image = compression.compress(inputblob, 100)
+    outputblob.set(compressed_image)
 
-    max_size = (100, 100)
-
-    # Create a thumbnail. This method modifies the image to contain 
-    # a thumbnail version of itself, preserving original aspect ratio.
-    image.thumbnail(max_size)
-
-    # Save thumbnail to a BytesIO object
-    output_stream = io.BytesIO()
-    image.save(output_stream, format=image.format)
-
-    # Move back to the beginning of the stream
-    output_stream.seek(0)
-
-    # Write the stream to blob storage
-    outputblob.set(output_stream.read())
+@app.event_grid_trigger(arg_name="azeventgrid")
+def delete_compressed_image(azeventgrid: func.EventGridEvent):
+    logging.info(f'Python EventGrid trigger processed an event, name: {azeventgrid.subject}')
