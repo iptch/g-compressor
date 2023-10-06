@@ -30,8 +30,9 @@ def image_compressor_ultra_low(inputblob: func.InputStream, outputblob: func.Out
 
 @app.event_grid_trigger(arg_name="azeventgrid")
 def delete_compressed_image(azeventgrid: func.EventGridEvent):
-    logging.info(f'Python EventGrid trigger processed an event, name: {azeventgrid.subject}')
-    logging.info("JSON:")
-    logging.info(azeventgrid.get_json())
-    logging.info("NAME:")
-    logging.info(os.path.basename(azeventgrid.subject))
+    blob_name=os.path.basename(azeventgrid.subject)
+    connection_string = os.environ["AzureWebJobsStorage"]
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    for container_name in ["techcamp-target-low", "techcamp-target-ultra-low"]:
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+        blob_client.delete_blob()
