@@ -14,7 +14,7 @@ def compress(inputblob: func.InputStream, resolution: int) -> bytes:
 
     # Save thumbnail to a BytesIO object
     output_stream = io.BytesIO()
-    image.save(output_stream, format=image.format)
+    image.save(output_stream, format=image.format, quality=85)
 
     # Move back to the beginning of the stream
     output_stream.seek(0)

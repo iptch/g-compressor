@@ -19,7 +19,7 @@ app = func.FunctionApp()
                  connection=CONNECTION)
 def compress_image_for_detail_view(inputblob: func.InputStream, outputblob: func.Out[str]):
     logging.info(f"Compressing '{inputblob.name}' for detail view")
-    compressed_image = compression.compress(inputblob, 500)
+    compressed_image = compression.compress(inputblob, 1200)
     outputblob.set(compressed_image)
 
 @app.blob_trigger(arg_name="inputblob",
@@ -30,7 +30,7 @@ def compress_image_for_detail_view(inputblob: func.InputStream, outputblob: func
                  connection=CONNECTION)
 def compress_image_for_thumbnail(inputblob: func.InputStream, outputblob: func.Out[str]):
     logging.info(f"Compressing '{inputblob.name}' for thumbnail")
-    compressed_image = compression.compress(inputblob, 200)
+    compressed_image = compression.compress(inputblob, 400)
     outputblob.set(compressed_image)
 
 @app.event_grid_trigger(arg_name="azeventgrid")
